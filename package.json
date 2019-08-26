@@ -7,9 +7,64 @@
   "author": "FreightHub Recruiting Team",
   "license": "MIT",
   "scripts": {
-    "server": "json-server db.json"
+    "server": "json-server db.json",
+    "build:watch": "webpack-dev-server --mode development --colors --progress --content-base --open --hot --inline --config webpack.config.dev.js",
+    "build": "rimraf ./dist/* && webpack --mode production --config webpack.config.prod.js",
+    "lint": "esw webpack.config.* src --color",
+    "lint:watch": "npm run lint -- --watch",
+    "start": "npm-run-all --parallel server build:watch lint:watch",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
-    "json-server": "^0.14.2"
+    "json-server": "^0.14.2",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "compression-webpack-plugin": "1.1.11",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-react": "^1.1.7",
+    "eslint-loader": "^2.2.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-watch": "^6.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "style-loader": "^1.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2",
+    "webpack-md5-hash": "0.0.6"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
