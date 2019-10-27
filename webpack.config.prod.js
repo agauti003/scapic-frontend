@@ -2,29 +2,31 @@ const webpack = require('webpack');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const autoprefixer = require('autoprefixer');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const path = require('path');
 
 if (process.env.NODE_ENV === undefined) {
-    process.env.NODE_ENV = 'production';
+    process.env.NODE_ENV = 'development';
 }
 const GLOBALS = {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    'process.env.NODE_ENV': JSON.stringify('production'),
     "__DEV__": false
 };
 
 const webpackConfig = {
+    mode: 'production',
     resolve: {
         extensions: ['*', '.js', '.jsx', '.json']
     },
-    mode: process.env.NODE_ENV,
     devtool: 'source-map',
-    entry: [path.resolve(__dirname, 'src/index')],
+    entry: ['babel-polyfill', path.resolve(__dirname, 'src/index')],
+    target: 'web',
     output: {
-        path: path.join(__dirname, '/dist'),
-        filename: './[name].[hash].js'
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: './',
+        filename: '[name].[chunkhash].js'
     },
     optimization: {
         minimizer: [
@@ -38,7 +40,8 @@ const webpackConfig = {
                         comments: false
                     }
                 }
-            })
+            }),
+            new OptimizeCSSAssetsPlugin({})
         ],
         splitChunks: {
             minSize: 30000,
@@ -67,14 +70,9 @@ const webpackConfig = {
         concatenateModules: true
     },
     plugins: [
-        new WebpackMd5Hash(),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-        // Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
-        new webpack.DefinePlugin(GLOBALS),
-        // Generate an external css file with a hash in the filename
-        new MiniCssExtractPlugin('[name].[hash].css'),
         new HtmlWebpackPlugin({
-            template: './public/index.html',
+            template: 'public/index.html',
+            favicon: 'public/favicon.ico',
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -82,13 +80,23 @@ const webpackConfig = {
                 useShortDoctype: true,
                 removeEmptyAttributes: true,
                 removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true
+                keepClosingSlash: true
             },
             inject: true
         }),
+
+        // Hash the files using MD5 so that their names change when the content changes.
+        new WebpackMd5Hash(),
+
+        // Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
+        new webpack.DefinePlugin(GLOBALS),
+
+        // Generate an external css file with a hash in the filename
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash].css',
+            chunkFilename: '[id].css'
+        }),
+
         new webpack.LoaderOptionsPlugin({
             minimize: true,
             debug: false,
@@ -100,25 +108,14 @@ const webpackConfig = {
                 context: '/',
                 postcss: () => [autoprefixer]
             }
-        }),
-        new CompressionPlugin({
-            test: /\.(js|css)$/,
-            asset: '[path].gz[query]',
-            algorithm: 'gzip',
-            deleteOriginalAssets: true
         })
     ],
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/react', '@babel/env']
-                    }
-                }
+                use: 'babel-loader'
             },
             {
                 test: /\.eot(\?v=\d+.\d+.\d+)?$/,
@@ -191,19 +188,12 @@ const webpackConfig = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: false,
-                            outputStyle: 'expanded',
-                            includePaths: [
-                                path.resolve(process.cwd(), './node_modules')
-                            ]
+                            sourceMap: false
                         }
                     }
                 ]
             }
         ]
-    },
-    externals: {
-        Config: `${JSON.stringify(path.join(__dirname, `config/config.${process.env.NODE_ENV}.json`))}`
     }
 };
 module.exports = webpackConfig;
