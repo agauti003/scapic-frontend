@@ -46,7 +46,7 @@ export default class Box extends Component {
 
         let pathObj = this.props.obj;
 
-        mtlLoader.load(this.props.mtl, function (materials) {
+        mtlLoader.load(this.props.obj, function (materials) {
             materials.preload();
             objLoader.setMaterials(materials);
             objLoader.load(pathObj, function (object) {
