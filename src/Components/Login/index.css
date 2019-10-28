@@ -1,0 +1,74 @@
+.input-container {
+  display: flex;
+  flex: 1;
+  margin-bottom: 15px;
+}
+.label-text {
+  font-size: 25px;
+  font-family: cursive;
+  font-weight: 300;
+}
+button {
+  font-size: 25px;
+  font-family: cursive;
+  font-weight: 300;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  color: #fff;
+  background-color: #e91e63;
+  border-color: #e91e63;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.login-form-container {
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  width: 30%;
+  text-align: center;
+  border: 1px solid #bdbdbd;
+}
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  background-image: url(https://colorlib.com/etc/lf/Login_v5/images/bg-01.jpg);
+  align-items: center;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+.sign-up {
+  text-decoration: none;
+}

@@ -11,7 +11,7 @@ function Models (props) {
                 <div className={"img-wrapper parent-image"}>
                     <img
                         src={props.model3dObject.thumb}
-                        className={""}
+                        className={"images-conatiner"}
                         alt="Images"
                         width="100%"
                         height="150px"

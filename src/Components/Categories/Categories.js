@@ -6,59 +6,57 @@ import Slider from "react-slick";
 const settings = require("./SlideSetting.json");
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { handleLoadMoreClick } from '../../actions';
+import { handleLoadMoreCategories } from '../../actions';
 
 function Categories (props) {
     const categories = [];
     props.categoryData.some((elem, categoriesIndex) => {
         let models = [];
-        if (categoriesIndex < props.loadMoreCount) {
-            elem.models.some((model3dObject, index) => {
-                models.push(<Models
-                    key={elem.name + index + categoriesIndex}
-                    model3dObject={model3dObject}
-                />);
-            });
-            categories.push(
-                <span key={elem.name + categoriesIndex} className={""}>
-                    <div>
-                        <header className={"category-header"}>
-                            {elem.name}
-                        </header>
-                    </div>
-                    <Slider {...settings}>
-                        {models}
-                    </Slider>
-                </span>
-            );
-        } else if (categoriesIndex === props.loadMoreCount &&
-            categoriesIndex < props.categoryData.length) {
-            categories.push(
-                <div
-                    key={categoriesIndex}
-                    className={"load-more-container"}
-                    onClick={() => props.handleLoadMoreClick(props.loadMoreCount)}>
-                    {"Load More..."}
+        elem.models.some((model3dObject, index) => {
+            models.push(<Models
+                key={elem.name + index + categoriesIndex}
+                model3dObject={model3dObject}
+            />);
+        });
+        categories.push(
+            <span key={elem.name + categoriesIndex} className={""}>
+                <div>
+                    <header className={"category-header"}>
+                        {elem.name}
+                    </header>
                 </div>
-            );
-        } else {
-            return true;
-        }
+                <Slider {...settings}>
+                    {models}
+                </Slider>
+            </span>
+        );
     });
+    if (props.totalCategories > props.loadMoreCount) {
+        categories.push(
+            <div
+                key={props.totalCategories}
+                className={"load-more-container"}
+                onClick={() => props.handleLoadMoreCategories({ ...props })}>
+                {"Load More..."}
+            </div>
+        );
+    }
     return (<span>
         {categories}
     </span>);
 }
 const mapDispatchToProps = dispatch => ({
-    handleLoadMoreClick: payload => dispatch(handleLoadMoreClick(payload))
+    handleLoadMoreCategories: payload => dispatch(handleLoadMoreCategories(payload))
 });
 const mapStateToProps = state => ({
-    loadMoreCount: state.loadMoreCount
+    loadMoreCount: state.loadMoreCount,
+    totalCategories: state.totalCategories
 });
 Categories.propTypes = {
-    handleLoadMoreClick: PropTypes.func,
+    handleLoadMoreCategories: PropTypes.func,
     handleImageClick: PropTypes.func,
     loadMoreCount: PropTypes.number,
+    totalCategories: PropTypes.number,
     categoryData: PropTypes.array
 };
 
