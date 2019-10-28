@@ -56,12 +56,12 @@ export default class Box extends Component {
             });
         });
 
-        var animate = function () {
-            requestAnimationFrame(animate);
+        var animate3d = function () {
+            requestAnimationFrame(animate3d);
             controls.update();
             renderer.render(scene, camera);
         };
-        animate();
+        animate3d();
         this.mount.appendChild(renderer.domElement);
         this.start();
     }

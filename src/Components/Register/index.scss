@@ -1,3 +1,16 @@
+.google-button {
+  span {
+    font-weight: 500;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: unset !important;
+    font-weight: 500;
+  }
+  div {
+    display: none;
+  }
+}
 .input-container {
   display: flex;
   flex: 1;
@@ -10,18 +23,18 @@
 }
 .google-button,
 .submit-button {
-  font-size: 25px;
-  font-family: cursive;
-  font-weight: 300;
-  width: 100%;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  cursor: pointer;
-  color: #fff;
-  background-color: #e91e63;
-  border-color: #e91e63;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+  font-size: 25px !important;
+  font-family: cursive !important;
+  font-weight: 300 !important;
+  width: 100% !important;
+  height: calc(1.5em + 0.75rem + 2px) !important;
+  padding: 0.375rem 0.75rem !important;
+  cursor: pointer !important;
+  color: #fff !important;
+  background-color: #e91e63 !important;
+  border-color: #e91e63 !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
   display: inline-block;
   text-align: center;
   vertical-align: middle;
@@ -29,9 +42,9 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border: 1px solid transparent;
+  border: 1px solid transparent !important;
   line-height: 1.5;
-  border-radius: 0.25rem;
+  border-radius: 0.25rem !important;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }

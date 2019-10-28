@@ -2,8 +2,10 @@ import React, { PureComponent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login } from '../../actions/accounts';
-import './index.css';
+import { login, socialLogin } from '../../actions/accounts';
+import GoogleLogin from 'react-google-login';
+import './index.scss';
+const oauthConfig = require('../../../oauth.config.json');
 
 class index extends PureComponent {
     constructor (props) {
@@ -14,6 +16,7 @@ class index extends PureComponent {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.responseGoogle = this.responseGoogle.bind(this);
     }
     handleChange (event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -23,6 +26,9 @@ class index extends PureComponent {
         if (this.state.email !== "" || this.state.password !== "") {
             this.props.login(this.state);
         }
+    }
+    responseGoogle (event) {
+        this.props.socialLogin({ ...event });
     }
     render () {
         if (this.props.loginComplete !== null && sessionStorage.getItem("accessToken")) {
@@ -68,14 +74,13 @@ class index extends PureComponent {
                             </button>
                         </div>
                         <div className={"google-button-container"}>
-                            <button
+                            <GoogleLogin
+                                clientId={oauthConfig.googleClientId}
                                 className={"google-button"}
-                                onClick={this.handleSubmit}>
-                                <img
-                                    src="https://colorlib.com/etc/lf/Login_v5/images/icons/icon-google.png"
-                                    alt="GOOGLE" />
-                                &nbsp;Google
-                            </button>
+                                buttonText={"google login"}
+                                onSuccess={this.responseGoogle}
+                                onFailure={this.responseGoogle}
+                            />
                         </div>
                         <div className={"register"}>
                             <span className={"label-text"}>
@@ -91,10 +96,12 @@ class index extends PureComponent {
 }
 index.propTypes = {
     login: PropTypes.func,
+    socialLogin: PropTypes.func,
     loginComplete: PropTypes.string
 };
 const mapDispatchToProps = dispatch => ({
-    login: payload => dispatch(login(payload))
+    login: payload => dispatch(login(payload)),
+    socialLogin: payload => dispatch(socialLogin(payload))
 });
 const mapStateToProps = state => ({
     loginComplete: state.loginComplete

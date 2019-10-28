@@ -2,9 +2,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { register } from '../../actions/accounts';
+import { register, socialsRegister } from '../../actions/accounts';
 import { connect } from 'react-redux';
-import './index.css';
+import GoogleLogin from 'react-google-login';
+import './index.scss';
+const oauthConfig = require('../../../oauth.config.json');
 
 class index extends PureComponent {
     constructor (props) {
@@ -16,6 +18,7 @@ class index extends PureComponent {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.responseGoogle = this.responseGoogle.bind(this);
     }
     handleChange (event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -28,10 +31,12 @@ class index extends PureComponent {
             this.props.register(this.state);
         }
     }
+    responseGoogle (event) {
+        this.props.socialsRegister({ ...event });
+    }
     render () {
         if (this.props.registerComplete !== null && sessionStorage.getItem("accessToken")) {
-            alert("user sucessfully registered \nPlease login now");
-            return (<Redirect to={"/login"} />);
+            return (<Redirect to={"/homepage"} />);
         }
         return (
             <div className={"main-container"}>
@@ -86,12 +91,13 @@ class index extends PureComponent {
                             </button>
                         </div>
                         <div className={"google-button-container"}>
-                            <button
+                            <GoogleLogin
+                                clientId={oauthConfig.googleClientId}
                                 className={"google-button"}
-                                onClick={this.handleSubmit}>
-                                <img src="https://colorlib.com/etc/lf/Login_v5/images/icons/icon-google.png" alt="GOOGLE" />
-                                &nbsp;Google
-                            </button>
+                                buttonText={"google register"}
+                                onSuccess={this.responseGoogle}
+                                onFailure={this.responseGoogle}
+                            />
                         </div>
                     </form>
                 </div>
@@ -101,10 +107,12 @@ class index extends PureComponent {
 }
 index.propTypes = {
     register: PropTypes.func,
+    socialsRegister: PropTypes.func,
     registerComplete: PropTypes.bool
 };
 const mapDispatchToProps = dispatch => ({
-    register: payload => dispatch(register(payload))
+    register: payload => dispatch(register(payload)),
+    socialsRegister: payload => dispatch(socialsRegister(payload))
 });
 const mapStateToProps = state => ({
     registerComplete: state.registerComplete
