@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
 
 if (process.env.NODE_ENV === undefined) {
@@ -30,17 +31,7 @@ const webpackConfig = {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
-                sourceMap: true,
-                uglifyOptions: {
-                    warnings: false,
-                    mangle: true,
-                    ie8: false,
-                    output: {
-                        comments: false
-                    }
-                }
-            }),
+            new UglifyJsPlugin(),
             new OptimizeCSSAssetsPlugin({})
         ],
         splitChunks: {
@@ -108,6 +99,15 @@ const webpackConfig = {
                 context: '/',
                 postcss: () => [autoprefixer]
             }
+        }),
+        new CompressionPlugin({
+            filename: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: /\.(js|css|html|svg)$/,
+            compressionOptions: { level: 11 },
+            threshold: 10240,
+            minRatio: 0.8,
+            deleteOriginalAssets: true
         })
     ],
     module: {
