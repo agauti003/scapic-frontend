@@ -58,7 +58,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1",
-    "three": "^0.109.0",
+    "three": "^0.137.0",
     "three-obj-mtl-loader": "^1.0.3",
     "three-orbitcontrols": "^2.108.1",
     "webpack-md5-hash": "0.0.6"
